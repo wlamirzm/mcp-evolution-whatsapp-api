@@ -21,8 +21,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "bun build ./src/main.ts --outdir dist --target node && chmod +x dist/main.js",
-    "start": "bun run dist/main.ts",
+    "build": "npx esbuild ./src/main.ts --bundle --platform=node --outfile=dist/main.js --format=esm --packages=external",
+    "start": "node dist/main.js",
     "test": "bun test",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run build",
@@ -39,6 +39,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/bun": "latest",
+    "esbuild": "^0.28.0",
     "standard-version": "^9.5.0"
   },
   "peerDependencies": {

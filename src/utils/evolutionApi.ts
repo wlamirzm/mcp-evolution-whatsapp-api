@@ -618,6 +618,34 @@ export class EvolutionApi {
       throw error;
     }
   }
+
+  /**
+   * Find messages for a specific instance
+   * @param instanceName Name of the Evolution API instance
+   * @param params Query parameters like page, recordsPerPage, etc.
+   * @returns List of messages matching the criteria
+   */
+  public async findMessages(
+    instanceName: string,
+    params?: FindMessagesParams
+  ): Promise<FindMessagesResponse> {
+    try {
+      const response = await this.axiosInstance.post(
+        `/chat/findMessages/${instanceName}`,
+        params || {}
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          `Error finding messages: ${
+            error.response?.data?.message || error.message
+          }`
+        );
+      }
+      throw error;
+    }
+  }
 }
 
 // Type definition for presence status
@@ -1430,6 +1458,26 @@ export interface FindContactsResponse {
     isWAContact: boolean;
     isMyContact: boolean;
   }[];
+}
+
+export interface FindMessagesParams {
+  page?: number;
+  recordsPerPage?: number;
+  where?: {
+    id?: string;
+    remoteJid?: string;
+    fromMe?: boolean;
+    messageType?: string;
+  };
+}
+
+export interface FindMessagesResponse {
+  messages: {
+    total: number;
+    pages: number;
+    currentPage: number;
+    records: any[];
+  };
 }
 
 // Create singleton instance
